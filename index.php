@@ -14,15 +14,19 @@
         <div class="container">
 
         <?php
+            $name = $_GET['name'];
+            if($name == ''):
+                $name = 'wp';
+            endif;
             $rows = array();
-            $sql = 'select id, article_title, article_content from 39yst_1 limit 20;';
+            $sql = "select id, article_title, article_content from {$name} limit 20;";
             $rs = $mysqli->query($sql);
             if($rs && $rs->num_rows > 0):
                 while($row = $rs->fetch_assoc()):
                     $rows[] = $row;
                 endwhile;
             else:
-                echo 'nothing';
+                echo 'Nothing';
             endif;
             $rs->close();
             $mysqli->close();

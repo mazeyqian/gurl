@@ -20,18 +20,34 @@
     endforeach;
 
     echo $title;
-    echo $content;
+    // echo $content;
 
     $href_pattern = '/(href=[\'|\"])http[s]{0,1}:\/\/.+([\'|\"])/U';
     $href_replace = '$1#link$2';
 
+    /* $img_pattern = '/(<center><p\sstyle=\"text-align:\scenter\">)?<img.+\/?>(<\/p><\/center>)?/'; */
+    $img_pattern = '/<img.+\/?>/U';
+    $img_replace = '';
+
+    $other1_pattern = '/<p\sclass=\"moblePageBreak\"\sstyle=\"display:\snone;\">&nbsp;<\/p>/';
+    $other1_replace = '';
+
+    $other2_pattern = '/target=[\'|\"]_blank[\'|\"]/';
+    $other2_replace = '';
+
+
     $pattern = array(
-        $href_pattern
+        $href_pattern,
+        $img_pattern,
+        $other1_pattern,
+        $other2_pattern
     );
     $replace = array(
-        $href_replace
+        $href_replace,
+        $img_replace,
+        $other1_replace,
+        $other2_replace
     );
-
 
     $result1 = preg_replace($pattern, $replace, $content);
 
