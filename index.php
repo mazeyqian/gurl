@@ -14,7 +14,7 @@
         <div class="container">
 
         <?php
-            $name = $_GET['name'];
+            $name = @$_GET['name'];
             if($name == ''):
                 $name = 'wp';
             endif;

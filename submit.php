@@ -20,7 +20,7 @@
         $content = $row['post_content'];
     endforeach;
 
-    echo $title;
+    // echo $title;
     // echo $content;
 
     $href_pattern = '/(href=[\'|\"])http[s]{0,1}:\/\/.+([\'|\"])/U';
@@ -52,5 +52,24 @@
 
     $result1 = preg_replace($pattern, $replace, $content);
 
-    echo "<pre>{$result1}</pre>";
+    // echo "<pre>{$result1}</pre>";
+
+    $post_title = $title;
+    $post_content = $result1;
+
+    /* 通过初审插入待发布表 */
+    $sqlInsert = "insert into wp (post_title, post_content) values(?, ?);";
+    $mysqli_stmt = $mysqli->prepare($sqlInsert);
+    $mysqli_stmt->bind_param('ss', $post_title, $post_content);
+    $rs1 = $mysqli_stmt->execute();
+    if($rs1):
+        echo 'Success';
+    else:
+        echo 'Fail';
+    endif;
+
+    $rs->close();
+    $mysqli->close();
+
+
 ?>
