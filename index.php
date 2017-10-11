@@ -19,7 +19,7 @@
                 $name = 'wp';
             endif;
             $rows = array();
-            $sql = "select id, article_title, article_content from {$name} limit 20;";
+            $sql = "select post_id, post_title, post_content from {$name} limit 20;";
             $rs = $mysqli->query($sql);
             if($rs && $rs->num_rows > 0):
                 while($row = $rs->fetch_assoc()):
@@ -37,15 +37,15 @@
                 <div class="col-md-8">
                     <article>
                         <header>
-                            <h2 class="text-center"><?php echo $row['article_title']; ?></h2>
+                            <h2 class="text-center"><?php echo $row['post_title']; ?></h2>
                         </header>
                         <div>
-                            <?php echo $row['article_content']; ?>
+                            <?php echo $row['post_content']; ?>
                         </div>
                     </article>
                 </div>
                 <div class="col-md-4">
-                    <a href="submit.php?id=<?php echo $row['id']; ?>" class="btn btn-primary">提交</a>
+                    <a href="submit.php?name=<?php echo $name; ?>&post_id=<?php echo $row['post_id']; ?>" class="btn btn-primary">提交</a>
                     <a href="#" class="btn btn-danger">删除</a>
                 </div>
             </div>

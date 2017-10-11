@@ -1,9 +1,10 @@
 <?php require_once ( dirname(__FILE__) . '/config/config.php' ); ?>
 
 <?php
-    $id = $_GET['id'];
+    $post_id = $_GET['post_id'];
+    $name = $_GET['name'];
     $rows = array();
-    $sql = "select article_title, article_content from 39yst_1 where id = {$id};";
+    $sql = "select post_title, post_content from {$name} where post_id = {$post_id};";
     $rs = $mysqli->query($sql);
     if($rs && $rs->row_nums=1):
         while($row = $rs->fetch_assoc()):
@@ -15,8 +16,8 @@
 
     /* 数据处理 */
     foreach($rows as $row):
-        $title = $row['article_title'];
-        $content = $row['article_content'];
+        $title = $row['post_title'];
+        $content = $row['post_content'];
     endforeach;
 
     echo $title;
@@ -39,14 +40,14 @@
     $pattern = array(
         $href_pattern,
         $img_pattern,
-        $other1_pattern,
-        $other2_pattern
+        $other1_pattern/* ,
+        $other2_pattern */
     );
     $replace = array(
         $href_replace,
         $img_replace,
-        $other1_replace,
-        $other2_replace
+        $other1_replace/* ,
+        $other2_replace */
     );
 
     $result1 = preg_replace($pattern, $replace, $content);
