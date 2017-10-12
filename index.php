@@ -15,11 +15,13 @@
 
         <?php
             $name = @$_GET['name'];
+            $sqlLike = generateSQLLike($keywords);
             if($name == ''):
                 $name = 'wp';
             endif;
             $rows = array();
-            $sql = "select post_id, post_title, post_content from {$name} where post_edit_status = 0 limit 20;";
+            $sql = "select post_id, post_title, post_content from {$name} where post_edit_status = 0 {$sqlLike} limit 20;";
+            // echo $sql;
             $rs = $mysqli->query($sql);
             if($rs && $rs->num_rows > 0):
                 while($row = $rs->fetch_assoc()):

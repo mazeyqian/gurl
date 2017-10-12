@@ -61,6 +61,8 @@
 
     switch($act):
         case 'submit':
+            /* 加重关键词 */
+            $post_content = strongStrByArr($keywords, $post_content);
             /* 验证同样标题是否已存在 */
             $sqlCheckExist = "select 1 from wp where post_title = '{$post_title}';";
             $rs2 = $mysqli->query($sqlCheckExist);
