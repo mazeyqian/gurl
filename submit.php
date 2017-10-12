@@ -102,7 +102,16 @@
             $resultReturn = '删除成功';
             break;
         case 'push':
-            $resultReturn = '推送成功';
+            $resultPost = request_post('http://mazey.cn/wp-content/themes/mazey-mip/interface/wp-insert-post.php', array(
+                'post_title' => $post_title,
+                'post_content' => $post_content
+            ));
+            if($resultPost > 0):
+                $resultReturn = '推送成功';
+            else:
+                die($resultPost);
+                $resultReturn = '推送失败';
+            endif;
             break;
         default:
             $resultReturn = 'ERROR: CASE?';
