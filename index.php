@@ -19,7 +19,7 @@
                 $name = 'wp';
             endif;
             $rows = array();
-            $sql = "select post_id, post_title, post_content from {$name} limit 20;";
+            $sql = "select post_id, post_title, post_content from {$name} where post_edit_status = 0 limit 20;";
             $rs = $mysqli->query($sql);
             if($rs && $rs->num_rows > 0):
                 while($row = $rs->fetch_assoc()):
@@ -45,8 +45,12 @@
                     </article>
                 </div>
                 <div class="col-md-4">
-                    <a href="submit.php?name=<?php echo $name; ?>&post_id=<?php echo $row['post_id']; ?>" class="btn btn-primary">提交</a>
-                    <a href="#" class="btn btn-danger">删除</a>
+                <?php if($name == 'wp'): ?>
+                    <a href="submit.php?act=push&name=<?php echo $name; ?>&post_id=<?php echo $row['post_id']; ?>" class="btn btn-info">推送</a>
+                <?php else: ?>
+                    <a href="submit.php?act=submit&name=<?php echo $name; ?>&post_id=<?php echo $row['post_id']; ?>" class="btn btn-primary">提交</a>
+                <?php endif; ?>
+                    <a href="submit.php?act=delete&name=<?php echo $name; ?>&post_id=<?php echo $row['post_id']; ?>" class="btn btn-danger">删除</a>
                 </div>
             </div>
         <?php endforeach; ?>
