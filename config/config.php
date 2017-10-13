@@ -5,7 +5,24 @@ require_once (dirname( __FILE__ ).'/mysql.php');
 require_once (dirname( __FILE__ ).'/mysqli-connect.php');
 
 $keywords = array(
-    '白发', '头发', '洗发', '护发', '养发', '头皮', '头疗', '肾', '血热', '脱发', '毛发', '脱落', '毛孔', '斑秃', '掉发', '秃顶', '谢顶'
+    '4' => '白发',
+    '5' => '头发',
+    '6' => '洗发',
+    '7' => '洗头',
+    '8' => '护发',
+    '9' => '养发',
+    '10' => '头皮',
+    '11' => '头疗',
+    '12' => '肾',
+    '13' => '血热',
+    '14' => '脱发',
+    '15' => '毛发',
+    '16' => '脱落',
+    '17' => '毛孔',
+    '18' => '斑秃',
+    '19' => '掉发',
+    '20' => '秃顶',
+    '4' => '谢顶'
 );
 
 function alertBack($str) {
@@ -22,11 +39,17 @@ function generateSQLLike($arr) {
 }
 
 function strongStrByArr($arr, $content) {
-    $ret = '';
+    $ret = array();
+    $tag = array();
     foreach($arr as $val):
-        $content = str_replace($val, "<strong class='tag'>{$val}</strong>", $content);
+        if(strpos($content, $val) !== false):
+            $content = str_replace($val, "<strong class='tag'>{$val}</strong>", $content);
+            $tag[] = $val;
+        endif;
     endforeach;
-    return $content;
+    $ret['0'] = $content;
+    $ret['1'] = $tag;
+    return $ret;
 }
 
 /**

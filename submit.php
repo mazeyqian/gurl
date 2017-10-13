@@ -6,7 +6,7 @@
     $act = $_GET['act'];
     $rows = array();
     $resultReturn = 'Unknow';
-    $sql = "select post_title, post_content from {$name} where post_id = {$post_id};";
+    $sql = "select post_title, post_content, post_tag from {$name} where post_id = {$post_id};";
     $rs = $mysqli->query($sql);
     if($rs && $rs->num_rows == 1):
         while($row = $rs->fetch_assoc()):
@@ -20,6 +20,7 @@
     foreach($rows as $row):
         $title = $row['post_title'];
         $content = $row['post_content'];
+        $tag = $row['post_tag'];
     endforeach;
 
     // echo $title;
@@ -58,11 +59,14 @@
 
     $post_title = $title;
     $post_content = $result1;
+    $post_tag = $tag;
 
     switch($act):
         case 'submit':
             /* 加重关键词 */
-            $post_content = strongStrByArr($keywords, $post_content);
+            $listStrongStrByArr = strongStrByArr($keywords, $post_content);
+            $post_content = $listStrongStrByArr['0'];
+            $post_tag = implode(',',$listStrongStrByArr['1']);
             /* 验证同样标题是否已存在 */
             $sqlCheckExist = "select 1 from wp where post_title = '{$post_title}';";
             $rs2 = $mysqli->query($sqlCheckExist);
@@ -78,9 +82,9 @@
             endif;
 
             /* 通过初审插入待发布表 */
-            $sqlInsert = "insert into wp (post_title, post_content) values(?, ?);";
+            $sqlInsert = "insert into wp (post_title, post_content, post_tag) values(?, ?, ?);";
             $mysqli_stmt = $mysqli->prepare($sqlInsert);
-            $mysqli_stmt->bind_param('ss', $post_title, $post_content);
+            $mysqli_stmt->bind_param('sss', $post_title, $post_content, $post_tag);
             $rs1 = $mysqli_stmt->execute();
             if($rs1):
                 /* 修改状态为已提交 */
@@ -102,11 +106,18 @@
             $resultReturn = '删除成功';
             break;
         case 'push':
-            $resultPost = request_post('http://mazey.cn/wp-content/themes/mazey-mip/interface/wp-insert-post.php', array(
+            $resultPost = request_post('http://www.zhibaifa.com/wp-insert-post', array(
                 'post_title' => $post_title,
-                'post_content' => $post_content
+                'post_content' => $post_content,
+                'post_tag' => $post_tag,
+                'post_category' => 24
             ));
             if($resultPost > 0):
+                /* 修改状态为已推送 */
+                $rs3 = $mysqli->query("update {$name} set post_edit_status = 4 where post_id = {$post_id};");
+                if(!$rs3):
+                    alertBack('改变状态失败-4');
+                endif;
                 $resultReturn = '推送成功';
             else:
                 die($resultPost);
