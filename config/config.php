@@ -5,24 +5,29 @@ require_once (dirname( __FILE__ ).'/mysql.php');
 require_once (dirname( __FILE__ ).'/mysqli-connect.php');
 
 $keywords = array(
-    '4' => '白发',
-    '5' => '头发',
-    '6' => '洗发',
-    '7' => '洗头',
-    '8' => '护发',
-    '9' => '养发',
-    '10' => '头皮',
-    '11' => '头疗',
-    '12' => '肾',
-    '13' => '血热',
-    '14' => '脱发',
-    '15' => '毛发',
-    '16' => '脱落',
-    '17' => '毛孔',
-    '18' => '斑秃',
-    '19' => '掉发',
-    '20' => '秃顶',
-    '4' => '谢顶'
+    /* 白发 */
+    '25001' => '白发',
+    /* 头发 */
+    '26001' => '头发',
+    '26002' => '头皮',
+    /* 护发 */
+    '27001' => '洗发',
+    '27002' => '洗头',
+    '27003' => '护发',
+    '27004' => '养发',
+    '27005' => '头疗',
+    /* 脱发 */
+    '28001' => '脱发',
+    '28002' => '毛发',
+    '28003' => '脱落',
+    '28004' => '斑秃',
+    '28005' => '掉发',
+    '28006' => '秃顶',
+    '28007' => '谢顶',
+    /* 健康 */
+    '29001' => '肾',
+    '29002' => '血热',
+    '29003' => '毛孔'
 );
 
 function alertBack($str) {
@@ -41,14 +46,17 @@ function generateSQLLike($arr) {
 function strongStrByArr($arr, $content) {
     $ret = array();
     $tag = array();
-    foreach($arr as $val):
+    $category = array();
+    foreach($arr as $key => $val):
         if(strpos($content, $val) !== false):
             $content = str_replace($val, "<strong class='tag'>{$val}</strong>", $content);
             $tag[] = $val;
+            $category[] = substr($key, 0, 2);
         endif;
     endforeach;
     $ret['0'] = $content;
     $ret['1'] = $tag;
+    $ret['2'] = implode(',', $category);
     return $ret;
 }
 
