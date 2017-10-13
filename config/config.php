@@ -56,7 +56,7 @@ function strongStrByArr($arr, $content) {
     endforeach;
     $ret['0'] = $content;
     $ret['1'] = $tag;
-    $ret['2'] = implode(',', $category);
+    $ret['2'] = implode(',', array_unique($category));
     return $ret;
 }
 
@@ -90,4 +90,7 @@ function request_post($url = '', $post_data = array()) {
 
     return $data;
 }
+
+/* 数组去重复 */
+
 ?>

@@ -6,7 +6,7 @@
     $act = $_GET['act'];
     $rows = array();
     $resultReturn = 'Unknow';
-    $sql = "select post_title, post_content, post_tag from {$name} where post_id = {$post_id};";
+    $sql = "select post_title, post_content, post_tag, post_category from {$name} where post_id = {$post_id};";
     $rs = $mysqli->query($sql);
     if($rs && $rs->num_rows == 1):
         while($row = $rs->fetch_assoc()):
@@ -21,6 +21,7 @@
         $title = $row['post_title'];
         $content = $row['post_content'];
         $tag = $row['post_tag'];
+        $category = $row['post_category'];
     endforeach;
 
     // echo $title;
@@ -60,6 +61,7 @@
     $post_title = $title;
     $post_content = $result1;
     $post_tag = $tag;
+    $post_category = $category;
 
     switch($act):
         case 'submit':
@@ -67,6 +69,8 @@
             $listStrongStrByArr = strongStrByArr($keywords, $post_content);
             $post_content = $listStrongStrByArr['0'];
             $post_tag = implode(',',$listStrongStrByArr['1']);
+            $post_category = $listStrongStrByArr['2'];
+            /* die($post_category); */
             /* 验证同样标题是否已存在 */
             $sqlCheckExist = "select 1 from wp where post_title = '{$post_title}';";
             $rs2 = $mysqli->query($sqlCheckExist);
@@ -82,9 +86,9 @@
             endif;
 
             /* 通过初审插入待发布表 */
-            $sqlInsert = "insert into wp (post_title, post_content, post_tag) values(?, ?, ?);";
+            $sqlInsert = "insert into wp (post_title, post_content, post_tag, post_category) values(?, ?, ?, ?);";
             $mysqli_stmt = $mysqli->prepare($sqlInsert);
-            $mysqli_stmt->bind_param('sss', $post_title, $post_content, $post_tag);
+            $mysqli_stmt->bind_param('ssss', $post_title, $post_content, $post_tag, $post_category);
             $rs1 = $mysqli_stmt->execute();
             if($rs1):
                 /* 修改状态为已提交 */
@@ -106,11 +110,13 @@
             $resultReturn = '删除成功';
             break;
         case 'push':
+            $post_status = @$_GET['post_status'];
             $resultPost = request_post('http://www.zhibaifa.com/wp-insert-post', array(
                 'post_title' => $post_title,
                 'post_content' => $post_content,
                 'post_tag' => $post_tag,
-                'post_category' => 24
+                'post_category' => $post_category,
+                'post_status' => $post_status
             ));
             if($resultPost > 0):
                 /* 修改状态为已推送 */
