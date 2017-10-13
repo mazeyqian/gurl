@@ -49,7 +49,7 @@
                 <div class="col-md-4">
                 <?php if($name == 'wp'): ?>
                     <a href="submit.php?act=push&post_status=publish&name=<?php echo $name; ?>&post_id=<?php echo $row['post_id']; ?>" class="btn btn-info">发布</a>
-                    <a href="submit.php?act=push&post_status=draft&name=<?php echo $name; ?>&post_id=<?php echo $row['post_id']; ?>" class="btn btn-info">草稿</a>
+                    <a href="submit.php?act=push&post_status=draft&name=<?php echo $name; ?>&post_id=<?php echo $row['post_id']; ?>" class="btn btn-warning">草稿</a>
                 <?php else: ?>
                     <a href="submit.php?act=submit&name=<?php echo $name; ?>&post_id=<?php echo $row['post_id']; ?>" class="btn btn-primary">提交</a>
                 <?php endif; ?>

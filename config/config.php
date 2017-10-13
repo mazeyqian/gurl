@@ -30,6 +30,10 @@ $keywords = array(
     '29003' => '毛孔'
 );
 
+$web = array(
+    '39yst'
+);
+
 function alertBack($str) {
     die("<script>alert('{$str}');window.self.location=document.referrer;</script>");
 }
@@ -91,6 +95,15 @@ function request_post($url = '', $post_data = array()) {
     return $data;
 }
 
-/* 数组去重复 */
+/* 验证是否含有非法关键词 */
+function isIllegality($str) {
+    global $web;
+    foreach($web as $val):
+        if(strpos($str, $val) !== false):
+            return false;
+        endif;
+    endforeach;
+    return true;
+}
 
 ?>

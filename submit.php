@@ -111,6 +111,10 @@
             break;
         case 'push':
             $post_status = @$_GET['post_status'];
+            /*  验证非法关键词 */
+            if(!isIllegality($post_content)):
+                alertBack('内容包含非法关键词');
+            endif;
             $resultPost = request_post('http://www.zhibaifa.com/wp-insert-post', array(
                 'post_title' => $post_title,
                 'post_content' => $post_content,
