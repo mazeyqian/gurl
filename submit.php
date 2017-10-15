@@ -6,13 +6,14 @@
     $act = $_GET['act'];
     $rows = array();
     $resultReturn = 'Unknow';
-    $sql = "select post_title, post_content, post_tag, post_category from {$name} where post_id = {$post_id};";
+    $sql = "select post_title, post_content, post_tag, post_category, post_date from {$name} where post_id = {$post_id};";
     $rs = $mysqli->query($sql);
     if($rs && $rs->num_rows == 1):
         while($row = $rs->fetch_assoc()):
             $rows[] = $row;
         endwhile;
     else:
+        /* die($sql); */
         alertBack('没有数据');
     endif;
 
@@ -22,6 +23,7 @@
         $content = $row['post_content'];
         $tag = $row['post_tag'];
         $category = $row['post_category'];
+        $date = $row['post_date'];
     endforeach;
 
     // echo $title;
@@ -62,6 +64,7 @@
     $post_content = $result1;
     $post_tag = $tag;
     $post_category = $category;
+    $post_date = $date;
 
     switch($act):
         case 'submit':
@@ -70,13 +73,14 @@
             $post_content = $listStrongStrByArr['0'];
             $post_tag = implode(',',$listStrongStrByArr['1']);
             $post_category = $listStrongStrByArr['2'];
+            $post_date = getPostDate();
             /* die($post_category); */
             /* 验证同样标题是否已存在 */
             $sqlCheckExist = "select 1 from wp where post_title = '{$post_title}';";
             $rs2 = $mysqli->query($sqlCheckExist);
             /* print_r($rs2);
             die(); */
-            if($rs2 && $rs2->num_rows > 1):
+            if($rs2 && $rs2->num_rows > 0):
                 /* 修改状态为已删除 */
                 $rs3 = $mysqli->query("update {$name} set post_edit_status = 2 where post_id = {$post_id};");
                 if(!$rs3):
@@ -86,9 +90,9 @@
             endif;
 
             /* 通过初审插入待发布表 */
-            $sqlInsert = "insert into wp (post_title, post_content, post_tag, post_category) values(?, ?, ?, ?);";
+            $sqlInsert = "insert into wp (post_title, post_content, post_tag, post_category, post_date) values(?, ?, ?, ?, ?);";
             $mysqli_stmt = $mysqli->prepare($sqlInsert);
-            $mysqli_stmt->bind_param('ssss', $post_title, $post_content, $post_tag, $post_category);
+            $mysqli_stmt->bind_param('sssss', $post_title, $post_content, $post_tag, $post_category, $post_date);
             $rs1 = $mysqli_stmt->execute();
             if($rs1):
                 /* 修改状态为已提交 */
@@ -96,6 +100,7 @@
                 if(!$rs3):
                     alertBack('改变状态失败-3');
                 endif;
+                /* die(); */
                 $resultReturn = '提交成功';
             else:
                 $resultReturn = '数据库错误';
@@ -120,7 +125,8 @@
                 'post_content' => $post_content,
                 'post_tag' => $post_tag,
                 'post_category' => $post_category,
-                'post_status' => $post_status
+                'post_status' => $post_status,
+                'post_date' => $post_date
             ));
             if($resultPost > 0):
                 /* 修改状态为已推送 */
@@ -130,7 +136,7 @@
                 endif;
                 $resultReturn = '推送成功';
             else:
-                die($resultPost);
+                /* die($resultPost); */
                 $resultReturn = '推送失败';
             endif;
             break;
