@@ -36,23 +36,28 @@
     $img_pattern = '/<img.+\/?>/U';
     $img_replace = '';
 
-    $other1_pattern = '/<p\sclass=\"moblePageBreak\"\sstyle=\"display:\snone;\">&nbsp;<\/p>/';
+    $other1_pattern = '/<p\sclass=\"moblePageBreak\"\sstyle=\"display:\snone;\">&nbsp;<\/p>/U';
     $other1_replace = '';
 
-    $other2_pattern = '/target=[\'|\"]_blank[\'|\"]/';
+    $other2_pattern = '/target=[\'|\"]_blank[\'|\"]/U';
     $other2_replace = '';
+
+    $other3_pattern = '/style=[\'|\"].*[\'|\"]/U';
+    $other3_replace = '';
 
 
     $pattern = array(
         $href_pattern,
         $img_pattern,
-        $other1_pattern/* ,
+        $other1_pattern,
+        $other3_pattern/* ,
         $other2_pattern */
     );
     $replace = array(
         $href_replace,
         $img_replace,
-        $other1_replace/* ,
+        $other1_replace,
+        $other3_replace/* ,
         $other2_replace */
     );
 
@@ -120,7 +125,7 @@
             if(!isIllegality($post_content)):
                 alertBack('内容包含非法关键词');
             endif;
-            $resultPost = request_post('http://www.zhibaifa.com/wp-insert-post', array(
+            $resultPost = request_post('http://local.zhibaifa.com/wp-insert-post', array(
                 'post_title' => $post_title,
                 'post_content' => $post_content,
                 'post_tag' => $post_tag,
