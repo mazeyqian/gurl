@@ -118,7 +118,8 @@ function strongStrByArr($arr, $content) {
     $category = array();
     foreach($arr as $key => $val):
         if(strpos($content, $val) !== false):
-            $content = str_replace($val, "<strong class='tag'>{$val}</strong>", $content);
+            /* 关键词出现在a标签中会混乱 */
+            //$content = str_replace($val, "<strong class='tag'>{$val}</strong>", $content);
             $tag[] = $val;
             $category[] = substr($key, 0, 2);
         endif;
@@ -175,6 +176,7 @@ function isIllegality($str) {
 function getPostDate() {
     global $mysqli;
     $nowDate = date("Y-m-d H:i:s");
+    //return $nowDate;
     $rows = array();
     /* 获取最新时间 */
     $sql = "select post_date from wp order by post_date desc limit 1;";

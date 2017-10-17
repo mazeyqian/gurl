@@ -76,6 +76,9 @@
             /* 加重关键词 */
             $listStrongStrByArr = strongStrByArr($keywords, $post_content);
             $post_content = $listStrongStrByArr['0'];
+            /* 替换主语 */
+            $post_content = str_replace('小编', '治白发网', $post_content);
+            $post_content = str_replace('民福康', '治白发网', $post_content);
             $post_tag = implode(',',$listStrongStrByArr['1']);
             $post_category = $listStrongStrByArr['2'];
             $post_date = getPostDate();
@@ -120,12 +123,13 @@
             $resultReturn = '删除成功';
             break;
         case 'push':
+        case 'strongpush':
             $post_status = @$_GET['post_status'];
             /*  验证非法关键词 */
-            if(!isIllegality($post_content)):
+            if(!isIllegality($post_content) && $act != 'strongpush'):
                 alertBack('内容包含非法关键词');
             endif;
-            $resultPost = request_post('http://local.zhibaifa.com/wp-insert-post', array(
+            $resultPost = request_post('http://www.zhibaifa.com/wp-insert-post', array(
                 'post_title' => $post_title,
                 'post_content' => $post_content,
                 'post_tag' => $post_tag,
