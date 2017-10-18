@@ -79,6 +79,7 @@
             /* 替换主语 */
             $post_content = str_replace('小编', '治白发网', $post_content);
             $post_content = str_replace('民福康', '治白发网', $post_content);
+            $post_content = str_replace('本篇文章版权归三九养生堂所有，未经许可，谢绝转载。', '治白发网部分内容来自网络，本站信息仅供参考，不能作为诊断及治疗的依据。', $post_content);
             $post_tag = implode(',',$listStrongStrByArr['1']);
             $post_category = $listStrongStrByArr['2'];
             $post_date = getPostDate();
@@ -124,10 +125,14 @@
             break;
         case 'push':
         case 'strongpush':
+        case 'pushimmediately':
             $post_status = @$_GET['post_status'];
             /*  验证非法关键词 */
             if(!isIllegality($post_content) && $act != 'strongpush'):
                 alertBack('内容包含非法关键词');
+            endif;
+            if($act == 'pushimmediately'):
+                $post_date = date("Y-m-d H:i:s");
             endif;
             $resultPost = request_post('http://www.zhibaifa.com/wp-insert-post', array(
                 'post_title' => $post_title,

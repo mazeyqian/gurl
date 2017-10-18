@@ -15,7 +15,8 @@
 
         <?php
             $name = @$_GET['name'];
-            $sqlLike = generateSQLLike($keywords);
+            //$sqlLike = generateSQLLike($keywords);
+            $sqlLike = " and post_content like '%白发%'";
             if($name == ''):
                 $name = 'wp';
             endif;
@@ -48,7 +49,8 @@
                 </div>
                 <div class="col-md-4">
                 <?php if($name == 'wp'): ?>
-                    <a href="submit.php?act=push&post_status=publish&name=<?php echo $name; ?>&post_id=<?php echo $row['post_id']; ?>" class="btn btn-success">发布</a>
+                    <a href="submit.php?act=pushimmediately&post_status=publish&name=<?php echo $name; ?>&post_id=<?php echo $row['post_id']; ?>" class="btn btn-success">立即发布</a>
+                    <a href="submit.php?act=push&post_status=future&name=<?php echo $name; ?>&post_id=<?php echo $row['post_id']; ?>" class="btn btn-success">定时发布</a>
                     <a href="submit.php?act=push&post_status=draft&name=<?php echo $name; ?>&post_id=<?php echo $row['post_id']; ?>" class="btn btn-info">草稿</a>
                     <a href="submit.php?act=strongpush&post_status=draft&name=<?php echo $name; ?>&post_id=<?php echo $row['post_id']; ?>" class="btn btn-warning">强推</a>
                 <?php else: ?>

@@ -119,7 +119,9 @@ function strongStrByArr($arr, $content) {
     foreach($arr as $key => $val):
         if(strpos($content, $val) !== false):
             /* 关键词出现在a标签中会混乱 */
-            //$content = str_replace($val, "<strong class='tag'>{$val}</strong>", $content);
+            if(strpos($content, '<a') == false):
+                $content = str_replace($val, "<strong class='tag'>{$val}</strong>", $content);
+            endif;
             $tag[] = $val;
             $category[] = substr($key, 0, 2);
         endif;
