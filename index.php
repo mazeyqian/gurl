@@ -15,14 +15,16 @@
 
         <?php
             $name = @$_GET['name'];
+            $sqlLike = '';
             //$sqlLike = generateSQLLike($keywords);
-            $sqlLike = " and post_content like '%白发%'";
+            //$sqlLike = " and post_content like '%白发%'";
+            //$sqlLike = " and (post_content like '%维生素E%' )";
             if($name == ''):
                 $name = 'wp';
             endif;
             $rows = array();
             $sql = "select post_id, post_title, post_content from {$name} where post_edit_status = 0 {$sqlLike} limit 10;";
-            //echo $sql;
+            echo "<script>console.log('{$sql}');</script>";
             $rs = $mysqli->query($sql);
             if($rs && $rs->num_rows > 0):
                 while($row = $rs->fetch_assoc()):
@@ -42,7 +44,7 @@
                         <header>
                             <h2 class="text-center"><?php echo $row['post_title']; ?></h2>
                         </header>
-                        <div>
+                        <div contenteditable="true">
                             <?php echo $row['post_content']; ?>
                         </div>
                     </article>

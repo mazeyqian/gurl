@@ -7,6 +7,9 @@ require_once (dirname( __FILE__ ).'/mysqli-connect.php');
 $keywords = array(
     /* 白发 */
     '25001' => '白发',
+    '25002' => '白头发',
+    '25003' => '治疗白发',
+    '25004' => '白发转黑',
     /* 头发 */
     '26001' => '头发',
     '26002' => '头皮',
@@ -54,6 +57,7 @@ $keywords = array(
     '31022' => '松子',
     '31023' => '枣',
     '31024' => '乌骨',
+    '31025' => '醋泡黑豆',
     /* 理疗 */
     '32001' => '按摩',
     '32002' => '侧柏',
@@ -91,7 +95,15 @@ $keywords = array(
     '37003' => '熬夜',
     '37004' => '压力',
     '37005' => '营养',
-    '37006' => '基因'
+    '37006' => '基因',
+    /* 护肤 */
+    '92001' => '疤痕',
+    '92002' => '维生素E',
+    '92003' => '去疤',
+    '92004' => '芦荟',
+    '92005' => '芦荟胶',
+    '92006' => '痘痘',
+    '92007' => '祛疤'
 );
 
 $web = array(
@@ -120,7 +132,8 @@ function strongStrByArr($arr, $content) {
         if(strpos($content, $val) !== false):
             /* 关键词出现在a标签中会混乱 */
             if(strpos($content, '<a') == false):
-                $content = str_replace($val, "<strong class='tag'>{$val}</strong>", $content);
+                /* 各关键词有包含关系，暂时关闭加粗 */
+                //$content = str_replace($val, "<strong class='tag'>{$val}</strong>", $content);
             endif;
             $tag[] = $val;
             $category[] = substr($key, 0, 2);

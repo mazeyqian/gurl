@@ -78,8 +78,11 @@
             $post_content = $listStrongStrByArr['0'];
             /* 替换主语 */
             $post_content = str_replace('小编', '治白发网', $post_content);
+            //$post_content = str_replace('本文', '治白发网', $post_content);
             $post_content = str_replace('民福康', '治白发网', $post_content);
             $post_content = str_replace('本篇文章版权归三九养生堂所有，未经许可，谢绝转载。', '治白发网部分内容来自网络，本站信息仅供参考，不能作为诊断及治疗的依据。', $post_content);
+            $post_content = str_replace('本篇文章版权归三九养生堂所有', '治白发网部分内容来自网络，本站信息仅供参考，不能作为诊断及治疗的依据。', $post_content);
+            $post_content = str_replace('三九养生堂', '治白发网', $post_content);
             $post_tag = implode(',',$listStrongStrByArr['1']);
             $post_category = $listStrongStrByArr['2'];
             $post_date = getPostDate();
