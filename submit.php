@@ -151,7 +151,8 @@
                 if(!$rs3):
                     alertBack('改变状态失败-4');
                 endif;
-                $resultReturn = '推送成功';
+                // $resultReturn = '推送成功';
+                $resultReturn = 'success';
             else:
                 /* die($resultPost); */
                 $resultReturn = '推送失败';
@@ -163,5 +164,9 @@
 
     $rs->close();
     $mysqli->close();
-    alertBack($resultReturn);
+    if($resultReturn !== 'success'):
+        alertBack($resultReturn);
+    else:
+        die("<script>window.self.location=document.referrer;</script>");
+    endif;
 ?>

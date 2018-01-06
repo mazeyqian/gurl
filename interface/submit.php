@@ -89,7 +89,7 @@ switch($act):
             endif;
             /* die(); */
             /* $resultReturn = '提交成功'; */
-            die(json_encode(array('ret' => '提交成功')));
+            die(json_encode(array('ret' => '提交成功', 'code' => 0)));
         else:
             /* $resultReturn = '数据库错误'; */
             die(json_encode(array('ret' => '数据库错误')));

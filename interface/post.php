@@ -14,8 +14,8 @@ require_once ( dirname(__FILE__) . '/../config/config.php' );
 $retArr = array();
 $retPost = array();
 $name = $_POST['name'];//'39yst_3';
-//$sqlLike = generateSQLLike($keywords);
-$sqlLike = " and post_content like '%白发%'";
+$sqlLike = generateSQLLike($keywords);
+//$sqlLike = " and post_content like '%白发%'";
 //$sqlLike = " and (post_content like '%打嗝%' )";
 if($name == ''):
     $name = 'wp';
