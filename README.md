@@ -52,7 +52,7 @@ func main() {
 
 ## Contributing
 
-Contributions to GURL are welcome! Please submit a pull request or open an issue on our [GitHub repository](https://github.com/mazeyqian/gurl).
+Contributions to GURL are welcome! Please submit a pull request or open an issue on [GitHub repository](https://github.com/mazeyqian/gurl).
 
 ## License
 
