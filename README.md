@@ -33,22 +33,22 @@ func main() {
 
 ## Functions
 
-| Function | Parameters | Return Value | Description |
+| Function | Parameter | Return Value | Description |
 |----------|------------|--------------|-------------|
-| `GetQueryParam` | `url, param string` | `(string, error)` | Gets the value of a query parameter from a URL |
-| `SetQueryParam` | `url, param, value string` | `(string, error)` | Sets the value of a query parameter in a URL |
-| `DelQueryParam` | `url, param string` | `(string, error)` | Deletes a query parameter from a URL |
-| `GetPath` | `url string` | `(string, error)` | Gets the path from a URL |
-| `SetPath` | `url, newPath string` | `(string, error)` | Sets the path in a URL |
-| `GetHost` | `url string` | `(string, error)` | Gets the host from a URL |
-| `SetHost` | `url, newHost string` | `(string, error)` | Sets the host in a URL |
-| `GetHostname` | `url string` | `(string, error)` | Gets the hostname from a URL |
-| `SetHostname` | `url, newHostname string` | `(string, error)` | Sets the hostname in a URL |
-| `GetProtocol` | `url string` | `(string, error)` | Gets the protocol from a URL |
-| `SetProtocol` | `url, newProtocol string` | `(string, error)` | Sets the protocol in a URL |
-| `CheckValid` | `url string` | `bool` | Checks if a URL is valid |
-| `CheckValidHttpUrl` | `url string` | `bool` | Checks if a URL is valid and uses either the HTTP or HTTPS scheme |
-| `GetUrlFileType` | `url string` | `(string, error)` | Gets the file type of a URL |
+| `GetQueryParam` | `url, param string` | `string, error` | Get the value of a query parameter from a URL |
+| `SetQueryParam` | `url, param, value string` | `string, error` | Set the value of a query parameter in a URL |
+| `DelQueryParam` | `url, param string` | `string, error` | Delete a query parameter from a URL |
+| `GetPath` | `url string` | `string, error` | Get the path from a URL |
+| `SetPath` | `url, newPath string` | `string, error` | Set the path in a URL |
+| `GetHost` | `url string` | `string, error` | Get the host from a URL |
+| `SetHost` | `url, newHost string` | `string, error` | Set the host in a URL |
+| `GetHostname` | `url string` | `string, error` | Get the hostname from a URL |
+| `SetHostname` | `url, newHostname string` | `string, error` | Set the hostname in a URL |
+| `GetProtocol` | `url string` | `string, error` | Get the protocol from a URL |
+| `SetProtocol` | `url, newProtocol string` | `string, error` | Set the protocol in a URL |
+| `CheckValid` | `url string` | `bool` | Check if a URL is valid |
+| `CheckValidHttpUrl` | `url string` | `bool` | Check if a URL is valid and uses either the HTTP or HTTPS scheme |
+| `GetUrlFileType` | `url string` | `string, error` | Get the file type of a URL |
 
 ## Contributing
 
