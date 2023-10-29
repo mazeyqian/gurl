@@ -1,1 +1,0 @@
-Show content by spider.
