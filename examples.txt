@@ -1,0 +1,89 @@
+// GetQueryParam
+gurl.GetQueryParam("http://example.com/?t1=1&t2=2&t3=3&t4=4#2333", "t1") // 1
+gurl.GetQueryParam("http://example.com/?t1=1&t2=2&t3=3&t4=4#2333", "t3") // 3
+gurl.GetQueryParam("http://example.com/?t1=1&t2=2&t3=3&t4=4#2333", "t4") // 4
+
+// SetQueryParam
+gurl.SetQueryParam("http://example.com/?t1=1&t2=2&t3=3&t4=4#2333", "t1", "111") // http://example.com/?t1=111&t2=2&t3=3&t4=4#2333
+gurl.SetQueryParam("http://example.com/?t1=1&t2=2&t3=3&t4=4#2333", "t3", "333") // http://example.com/?t1=1&t2=2&t3=333&t4=4#2333
+gurl.SetQueryParam("http://example.com/?t1=1&t2=2&t3=3&t4=4#2333", "t4", "444") // http://example.com/?t1=1&t2=2&t3=3&t4=444#2333
+
+// DelQueryParam
+gurl.DelQueryParam("http://example.com/?t1=1&t2=2&t3=3&t4=4#2333", "t1") // http://example.com/?t2=2&t3=3&t4=4#2333
+gurl.DelQueryParam("http://example.com/?t1=1&t2=2&t3=3&t4=4#2333", "t3") // http://example.com/?t1=1&t2=2&t4=4#2333
+gurl.DelQueryParam("http://example.com/?t1=1&t2=2&t3=3&t4=4#2333", "t4") // http://example.com/?t1=1&t2=2&t3=3#2333
+
+// GetHashParam
+gurl.GetHashParam("http://example.com/?#2333?t1=1&t2=2&t3=3&t4=4", "t1") // 1
+gurl.GetHashParam("http://example.com/?#2333?t1=1&t2=2&t3=3&t4=4", "t3") // 3
+gurl.GetHashParam("http://example.com/?#2333?t1=1&t2=2&t3=3&t4=4", "t4") // 4
+
+// SetHashParam
+gurl.SetHashParam("http://example.com/?#2333?t1=1&t2=2&t3=3&t4=4", "t1", "111") // http://example.com/?#2333?t1=111&t2=2&t3=3&t4=4
+gurl.SetHashParam("http://example.com/?#2333?t1=1&t2=2&t3=3&t4=4", "t3", "333") // http://example.com/?#2333?t1=1&t2=2&t3=333&t4=4
+gurl.SetHashParam("http://example.com/?#2333?t1=1&t2=2&t3=3&t4=4", "t4", "444") // http://example.com/?#2333?t1=1&t2=2&t3=3&t4=444
+
+// DelHashParam
+gurl.DelHashParam("http://example.com/?#2333?t1=1&t2=2&t3=3&t4=4", "t1") // http://example.com/?#2333?t2=2&t3=3&t4=4
+gurl.DelHashParam("http://example.com/?#2333?t1=1&t2=2&t3=3&t4=4", "t3") // http://example.com/?#2333?t1=1&t2=2&t4=4
+gurl.DelHashParam("http://example.com/?#2333?t1=1&t2=2&t3=3&t4=4", "t4") // http://example.com/?#2333?t1=1&t2=2&t3=3
+
+// GetPath
+gurl.GetPath("http://example.com/?#2333?t1=1&t2=2&t3=3&t4=4") // /
+gurl.GetPath("http://example.com/abc/?#2333?t1=1&t2=2&t3=3&t4=4") // /abc/
+gurl.GetPath("http://example.com/abc/def/?#2333?t1=1&t2=2&t3=3&t4=4") // /abc/def/
+gurl.GetPath("http://example.com/abc/def?#2333?t1=1&t2=2&t3=3&t4=4") // /abc/def
+
+// SetPath
+gurl.SetPath("http://example.com/?#2333?t1=1&t2=2&t3=3&t4=4", "/abc") // http://example.com/abc?#2333?t1=1&t2=2&t3=3&t4=4
+gurl.SetPath("http://example.com/?#2333?t1=1&t2=2&t3=3&t4=4", "/abc/def") // http://example.com/abc/def?#2333?t1=1&t2=2&t3=3&t4=4
+gurl.SetPath("http://example.com/?#2333?t1=1&t2=2&t3=3&t4=4", "/abc/def/") // http://example.com/abc/def/?#2333?t1=1&t2=2&t3=3&t4=4
+
+// GetHost
+gurl.GetHost("http://example.com/?#2333?t1=1&t2=2&t3=3&t4=4") // example.com
+gurl.GetHost("http://example.com/abc/?#2333?t1=1&t2=2&t3=3&t4=4") // example.com
+gurl.GetHost("http://example.com/abc/def/?#2333?t1=1&t2=2&t3=3&t4=4") // example.com
+gurl.GetHost("http://example.com/abc/def?#2333?t1=1&t2=2&t3=3&t4=4") // example.com
+gurl.GetHost("http://example.com:8080/abc/def?#2333?t1=1&t2=2&t3=3&t4=4") // example.com:8080
+
+// SetHost
+gurl.SetHost("http://example.com/?#2333?t1=1&t2=2&t3=3&t4=4", "abc.com") // http://abc.com/?#2333?t1=1&t2=2&t3=3&t4=4
+gurl.SetHost("http://example.com/abc/?#2333?t1=1&t2=2&t3=3&t4=4", "abc.com") // http://abc.com/abc/?#2333?t1=1&t2=2&t3=3&t4=4
+gurl.SetHost("http://example.com/abc/def/?#2333?t1=1&t2=2&t3=3&t4=4", "abc.com") // http://abc.com/abc/def/?#2333?t1=1&t2=2&t3=3&t4=4
+gurl.SetHost("http://example.com/abc/def?#2333?t1=1&t2=2&t3=3&t4=4", "abc.com") // http://abc.com/abc/def?#2333?t1=1&t2=2&t3=3&t4=4
+
+// GetHostname
+gurl.GetHostname("http://example.com/?#2333?t1=1&t2=2&t3=3&t4=4") // example.com
+gurl.GetHostname("http://example.com/abc/?#2333?t1=1&t2=2&t3=3&t4=4") // example.com
+gurl.GetHostname("http://example.com/abc/def/?#2333?t1=1&t2=2&t3=3&t4=4") // example.com
+gurl.GetHostname("http://example.com/abc/def?#2333?t1=1&t2=2&t3=3&t4=4") // example.com
+
+// SetHostname
+gurl.SetHostname("http://example.com/?#2333?t1=1&t2=2&t3=3&t4=4", "abc.com") // http://abc.com/?#2333?t1=1&t2=2&t3=3&t4=4
+
+// GetProtocol
+gurl.GetProtocol("http://example.com/?#2333?t1=1&t2=2&t3=3&t4=4") // http
+gurl.GetProtocol("ftp://example.com/abc/def/?#2333?t1=1&t2=2&t3=3&t4=4") // ftp
+gurl.GetProtocol("file://example.com/abc/def?#2333?t1=1&t2=2&t3=3&t4=4") // file
+
+// SetProtocol
+gurl.SetProtocol("http://example.com/?#2333?t1=1&t2=2&t3=3&t4=4", "https") // https://example.com/?#2333?t1=1&t2=2&t3=3&t4=4
+gurl.SetProtocol("https://example.com/abc/?#2333?t1=1&t2=2&t3=3&t4=4", "ftp") // ftp://example.com/abc/?#2333?t1=1&t2=2&t3=3&t4=4
+gurl.SetProtocol("ftp://example.com/abc/def/?#2333?t1=1&t2=2&t3=3&t4=4", "file") // file://example.com/abc/def/?#2333?t1=1&t2=2&t3=3&t4=4
+gurl.SetProtocol("file://example.com/abc/def?#2333?t1=1&t2=2&t3=3&t4=4", "http") // http://example.com/abc/def?#2333?t1=1&t2=2&t3=3&t4=4
+
+// CheckValidUrl
+gurl.CheckValid("http://example.com/?#2333?t1=1&t2=2&t3=3&t4=4") // true
+gurl.CheckValid("https://example.com/abc/?#2333?t1=1&t2=2&t3=3&t4=4") // true
+gurl.CheckValid("ftp://example.com/abc/def/?#2333?t1=1&t2=2&t3=3&t4=4") // true
+
+// CheckValidHttpUrl
+gurl.CheckValidHttpUrl("http://example.com/?#2333?t1=1&t2=2&t3=3&t4=4") // true
+gurl.CheckValidHttpUrl("https://example.com/abc/?#2333?t1=1&t2=2&t3=3&t4=4") // true
+gurl.CheckValidHttpUrl("ftp://example.com/abc/def/?#2333?t1=1&t2=2&t3=3&t4=4") // false
+
+// GetUrlFileType
+gurl.GetUrlFileType("https://example.com/a/b/c.png") // "png"
+gurl.GetUrlFileType("https://example.com/a/b/c.png?x=1") // "png"
+gurl.GetUrlFileType("https://example.com/a/b/c.jpg#x=1") // "jpg"
+gurl.GetUrlFileType("https://example.com/a/b/c.v/a") // ""
