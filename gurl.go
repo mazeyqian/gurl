@@ -94,7 +94,11 @@ func SetHashParam(u, param, value string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	hashParams := strings.Split(parsedUrl.Fragment, "&")
+	fra := parsedUrl.Fragment
+	hashParams := []string{}
+	if fra != "" {
+		hashParams = strings.Split(parsedUrl.Fragment, "&")
+	}
 	var newHashParams []string
 	paramExists := false
 	for _, p := range hashParams {

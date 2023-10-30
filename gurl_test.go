@@ -43,6 +43,8 @@ func TestSetHashParam(t *testing.T) {
 		{"http://example.com/#t1=1&t2=2", "t1", "3", "http://example.com/#t1=3&t2=2"},
 		{"http://example.com/#t1=1&t2=2", "t3", "3", "http://example.com/#t1=1&t2=2&t3=3"},
 		{"http://example.com/?233", "t3", "3", "http://example.com/?233#t3=3"},
+		{"http://example.com/?233#t3=3", "t4", "4", "http://example.com/?233#t3=3&t4=4"},
+		{"http://example.com/?233#t3=3", "t3", "4", "http://example.com/?233#t3=4"},
 	}
 	for _, test := range tests {
 		result, err := SetHashParam(test.url, test.param, test.value)
@@ -50,10 +52,6 @@ func TestSetHashParam(t *testing.T) {
 			t.Errorf("SetHashParam was incorrect, got: %s, want: %s.", result, test.result)
 		}
 	}
-	// result, err := SetHashParam("http://example.com/#t1=1&t2=2", "t1", "3")
-	// if err != nil || result != "http://example.com/#t1=3&t2=2" {
-	// 	t.Errorf("SetHashParam was incorrect, got: %s, want: %s.", result, "http://example.com/#t1=3&t2=2")
-	// }
 }
 
 func TestGetPath(t *testing.T) {
