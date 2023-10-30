@@ -6,6 +6,24 @@ import (
 	"strings"
 )
 
+// GetQueryParam retrieves the value of a specified query parameter from a URL.
+//
+// Parameters:
+//
+//	url: The URL from which to retrieve the query parameter.
+//	param: The name of the query parameter to retrieve.
+//
+// Returns:
+//
+//	A string containing the value of the query parameter, and an error if any occurred.
+//
+// Example:
+//
+//	result, err := GetQueryParam("http://example.com/?t1=1&t2=2", "t1")
+//	if err != nil {
+//	  panic(err)
+//	}
+//	fmt.Println(result) // Output: "1"
 func GetQueryParam(u, param string) (string, error) {
 	parsedUrl, err := url.Parse(u)
 	if err != nil {
