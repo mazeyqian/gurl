@@ -25,6 +25,37 @@ func TestDelQueryParam(t *testing.T) {
 	}
 }
 
+func TestGetHashParam(t *testing.T) {
+	result, err := GetHashParam("http://example.com/#t1=1&t2=2", "t1")
+	if err != nil || result != "1" {
+		t.Errorf("GetHashParam was incorrect, got: %s, want: %s.", result, "1")
+	}
+}
+
+func TestSetHashParam(t *testing.T) {
+	type HashTest struct {
+		url    string
+		param  string
+		value  string
+		result string
+	}
+	tests := []HashTest{
+		{"http://example.com/#t1=1&t2=2", "t1", "3", "http://example.com/#t1=3&t2=2"},
+		{"http://example.com/#t1=1&t2=2", "t3", "3", "http://example.com/#t1=1&t2=2&t3=3"},
+		{"http://example.com/?233", "t3", "3", "http://example.com/?233#t3=3"},
+	}
+	for _, test := range tests {
+		result, err := SetHashParam(test.url, test.param, test.value)
+		if err != nil || result != test.result {
+			t.Errorf("SetHashParam was incorrect, got: %s, want: %s.", result, test.result)
+		}
+	}
+	// result, err := SetHashParam("http://example.com/#t1=1&t2=2", "t1", "3")
+	// if err != nil || result != "http://example.com/#t1=3&t2=2" {
+	// 	t.Errorf("SetHashParam was incorrect, got: %s, want: %s.", result, "http://example.com/#t1=3&t2=2")
+	// }
+}
+
 func TestGetPath(t *testing.T) {
 	result, err := GetPath("http://example.com/path/to/resource")
 	if err != nil || result != "/path/to/resource" {

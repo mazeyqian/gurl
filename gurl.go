@@ -19,7 +19,7 @@ import (
 //
 // Example:
 //
-//	result, err := GetQueryParam("http://example.com/?t1=1&t2=2", "t1")
+//	result, err := GetQueryParam("http://example.com/?p1=1&p2=2", "p1")
 //	if err != nil {
 //	  panic(err)
 //	}
@@ -33,6 +33,25 @@ func GetQueryParam(u, param string) (string, error) {
 	return values.Get(param), nil
 }
 
+// SetQueryParam sets the value of a specified query parameter in a URL and returns the new URL.
+//
+// Parameters:
+//
+//	url: The URL in which to set the query parameter.
+//	param: The name of the query parameter to set.
+//	value: The value to set the query parameter to.
+//
+// Returns:
+//
+//	A string containing the new URL, and an error if any occurred.
+//
+// Example:
+//
+//	result, err := SetQueryParam("http://example.com/?p1=1&p2=2", "p1", "3")
+//	if err != nil {
+//	  panic(err)
+//	}
+//	fmt.Println(result) // Output: "http://example.com/?p1=3&p2=2"
 func SetQueryParam(u, param, value string) (string, error) {
 	parsedUrl, err := url.Parse(u)
 	if err != nil {
@@ -77,13 +96,18 @@ func SetHashParam(u, param, value string) (string, error) {
 	}
 	hashParams := strings.Split(parsedUrl.Fragment, "&")
 	var newHashParams []string
+	paramExists := false
 	for _, p := range hashParams {
 		pair := strings.Split(p, "=")
 		if pair[0] == param {
 			newHashParams = append(newHashParams, param+"="+value)
+			paramExists = true
 		} else {
 			newHashParams = append(newHashParams, p)
 		}
+	}
+	if !paramExists {
+		newHashParams = append(newHashParams, param+"="+value)
 	}
 	parsedUrl.Fragment = strings.Join(newHashParams, "&")
 	return parsedUrl.String(), nil
