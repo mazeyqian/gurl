@@ -54,6 +54,27 @@ func TestSetHashParam(t *testing.T) {
 	}
 }
 
+func TestDelHashParam(t *testing.T) {
+	type HashTest struct {
+		url    string
+		param  string
+		result string
+	}
+	tests := []HashTest{
+		{"http://example.com/#t1=1&t2=2", "t1", "http://example.com/#t2=2"},
+		{"http://example.com/#t1=1&t2=2", "t3", "http://example.com/#t1=1&t2=2"},
+		{"http://example.com/?233#t3=3", "t3", "http://example.com/?233"},
+		{"http://example.com/?233#t3=3&t4=4", "t3", "http://example.com/?233#t4=4"},
+		{"http://example.com/?233#t3=3&t4=4", "t4", "http://example.com/?233#t3=3"},
+	}
+	for _, test := range tests {
+		result, err := DelHashParam(test.url, test.param)
+		if err != nil || result != test.result {
+			t.Errorf("DelHashParam was incorrect, got: %s, want: %s.", result, test.result)
+		}
+	}
+}
+
 func TestGetPath(t *testing.T) {
 	result, err := GetPath("http://example.com/path/to/resource")
 	if err != nil || result != "/path/to/resource" {
