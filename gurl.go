@@ -1,6 +1,7 @@
 package gurl
 
 import (
+	"fmt"
 	"net/url"
 	"path/filepath"
 	"strings"
@@ -89,15 +90,38 @@ func GetHashParam(u, param string) (string, error) {
 	return "", nil
 }
 
+func parseFragment(fra string) (path string, query string) {
+	if strings.Contains(fra, "?") {
+		splitFra := strings.SplitN(fra, "?", 2)
+		path = splitFra[0]
+		query = splitFra[1]
+	} else if strings.HasPrefix(fra, "?") {
+		query = fra[1:]
+	} else {
+		path = fra
+	}
+	return
+}
+
 func SetHashParam(u, param, value string) (string, error) {
 	parsedUrl, err := url.Parse(u)
 	if err != nil {
 		return "", err
 	}
+	// log.Println("------------------")
+	// https://example.com/path#path?t3=3&t4=4
+	// https://example.com/path#?t3=3&t4=4
+	// https://example.com/path#t3=3&t4=4
 	fra := parsedUrl.Fragment
+	// log.Println("fra:", fra)
+	fraPath, fraQuery := parseFragment(fra)
+	// log.Println("path:", fraPath, "query:", fraQuery)
 	hashParams := []string{}
-	if fra != "" {
-		hashParams = strings.Split(parsedUrl.Fragment, "&")
+	if fraQuery != "" {
+		// path?t3=3&t4=4 path: path query: t3=3&t4=4
+		// ?t3=3&t4=4 path: query: t3=3&t4=4
+		// t3=3&t4=4 path: t3=3&t4=4 query:
+		hashParams = strings.Split(fraQuery, "&")
 	}
 	var newHashParams []string
 	paramExists := false
@@ -113,7 +137,10 @@ func SetHashParam(u, param, value string) (string, error) {
 	if !paramExists {
 		newHashParams = append(newHashParams, param+"="+value)
 	}
-	parsedUrl.Fragment = strings.Join(newHashParams, "&")
+	// log.Println("newHashParams:", newHashParams)
+	newFraStr := fmt.Sprintf("%s?%s", fraPath, strings.Join(newHashParams, "&"))
+	// log.Println("newFraStr:", newFraStr)
+	parsedUrl.Fragment = newFraStr // strings.Join(newHashParams, "&")
 	return parsedUrl.String(), nil
 }
 
