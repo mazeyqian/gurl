@@ -26,9 +26,26 @@ func TestDelQueryParam(t *testing.T) {
 }
 
 func TestGetHashParam(t *testing.T) {
-	result, err := GetHashParam("http://example.com/#t1=1&t2=2", "t1")
-	if err != nil || result != "1" {
-		t.Errorf("GetHashParam was incorrect, got: %s, want: %s.", result, "1")
+	type HashTest struct {
+		url    string
+		param  string
+		result string
+	}
+	tests := []HashTest{
+		{"http://example.com/#?t1=1&t2=2", "t1", "1"},
+		{"http://example.com/?t1=1&t2=2", "t1", ""},
+		{"http://example.com/p/?id=3#?t1=1&t2=2", "t1", "1"},
+		{"http://example.com/#?t1=1&t2=2", "t3", ""},
+		{"http://example.com/?p1=233#path", "t3", ""},
+		{"http://example.com/path/subp?233#?p1=1&t3=333", "t3", "333"},
+		{"http://example.com/?233#?t3=3&t4=&t5", "t4", ""},
+		{"http://example.com/?233#path?t3=3", "t3", "3"},
+	}
+	for _, test := range tests {
+		result, err := GetHashParam(test.url, test.param)
+		if err != nil || result != test.result {
+			t.Errorf("GetHashParam was incorrect, got: %s, want: %s.", result, test.result)
+		}
 	}
 }
 
@@ -40,6 +57,8 @@ func TestSetHashParam(t *testing.T) {
 		result string
 	}
 	tests := []HashTest{
+		{"http://example.com/#?ssss&p1=1&p2=2&000", "p1", "3", "http://example.com/#?ssss&p1=3&p2=2&000"},
+		{"http://example.com/#?ssss&p1=&p2=2&000", "p1", "3", "http://example.com/#?ssss&p1=3&p2=2&000"},
 		{"http://example.com/#?t1=1&t2=2", "t1", "3", "http://example.com/#?t1=3&t2=2"},
 		{"http://example.com/?t1=1&t2=2", "t1", "3", "http://example.com/?t1=1&t2=2#?t1=3"},
 		{"http://example.com/p/?id=3#?t1=1&t2=2", "t1", "3", "http://example.com/p/?id=3#?t1=3&t2=2"},
@@ -66,11 +85,17 @@ func TestDelHashParam(t *testing.T) {
 		result string
 	}
 	tests := []HashTest{
-		{"http://example.com/#t1=1&t2=2", "t1", "http://example.com/#t2=2"},
-		{"http://example.com/#t1=1&t2=2", "t3", "http://example.com/#t1=1&t2=2"},
-		{"http://example.com/?233#t3=3", "t3", "http://example.com/?233"},
-		{"http://example.com/?233#t3=3&t4=4", "t3", "http://example.com/?233#t4=4"},
-		{"http://example.com/?233#t3=3&t4=4", "t4", "http://example.com/?233#t3=3"},
+		{"http://example.com/#?p1=1", "p1", "http://example.com/"},
+		{"http://example.com/#?t1=1&t2=2", "t1", "http://example.com/#?t2=2"},
+		{"http://example.com/?t1=1&t2=2", "t1", "http://example.com/?t1=1&t2=2"},
+		{"http://example.com/p/?id=3#?t1=1&t2=2", "t1", "http://example.com/p/?id=3#?t2=2"},
+		{"http://example.com/#?t1=1&t2=2", "t3", "http://example.com/#?t1=1&t2=2"},
+		{"http://example.com/?p1=233", "t3", "http://example.com/?p1=233"},
+		{"http://example.com/path/subp?233", "t3", "http://example.com/path/subp?233"},
+		{"http://example.com/?233#?t3=3", "t4", "http://example.com/?233#?t3=3"},
+		{"http://example.com/?233#path?t3=3", "t3", "http://example.com/?233#path"},
+		{"http://example.com/?233#?p3=3&p4=4", "p3", "http://example.com/?233#?p4=4"},
+		{"http://example.com/?233#?p3=3&p4=4", "p3", "http://example.com/?233#?p4=4"},
 	}
 	for _, test := range tests {
 		result, err := DelHashParam(test.url, test.param)

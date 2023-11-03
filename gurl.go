@@ -75,21 +75,6 @@ func DelQueryParam(u, param string) (string, error) {
 	return parsedUrl.String(), nil
 }
 
-func GetHashParam(u, param string) (string, error) {
-	parsedUrl, err := url.Parse(u)
-	if err != nil {
-		return "", err
-	}
-	hashParams := strings.Split(parsedUrl.Fragment, "&")
-	for _, p := range hashParams {
-		pair := strings.Split(p, "=")
-		if pair[0] == param {
-			return pair[1], nil
-		}
-	}
-	return "", nil
-}
-
 func parseFragment(fra string) (path string, query string) {
 	if strings.Contains(fra, "?") {
 		splitFra := strings.SplitN(fra, "?", 2)
@@ -103,24 +88,35 @@ func parseFragment(fra string) (path string, query string) {
 	return
 }
 
+func GetHashParam(u, param string) (string, error) {
+	parsedUrl, err := url.Parse(u)
+	if err != nil {
+		return "", err
+	}
+	fra := parsedUrl.Fragment
+	_, fraQuery := parseFragment(fra)
+	hashParams := []string{}
+	if fraQuery != "" {
+		hashParams = strings.Split(fraQuery, "&")
+	}
+	for _, p := range hashParams {
+		pair := strings.Split(p, "=")
+		if pair[0] == param && len(pair) > 1 {
+			return pair[1], nil
+		}
+	}
+	return "", nil // fmt.Errorf("param %s not found in hash", param)
+}
+
 func SetHashParam(u, param, value string) (string, error) {
 	parsedUrl, err := url.Parse(u)
 	if err != nil {
 		return "", err
 	}
-	// log.Println("------------------")
-	// https://example.com/path#path?t3=3&t4=4
-	// https://example.com/path#?t3=3&t4=4
-	// https://example.com/path#t3=3&t4=4
 	fra := parsedUrl.Fragment
-	// log.Println("fra:", fra)
 	fraPath, fraQuery := parseFragment(fra)
-	// log.Println("path:", fraPath, "query:", fraQuery)
 	hashParams := []string{}
 	if fraQuery != "" {
-		// path?t3=3&t4=4 path: path query: t3=3&t4=4
-		// ?t3=3&t4=4 path: query: t3=3&t4=4
-		// t3=3&t4=4 path: t3=3&t4=4 query:
 		hashParams = strings.Split(fraQuery, "&")
 	}
 	var newHashParams []string
@@ -137,10 +133,8 @@ func SetHashParam(u, param, value string) (string, error) {
 	if !paramExists {
 		newHashParams = append(newHashParams, param+"="+value)
 	}
-	// log.Println("newHashParams:", newHashParams)
 	newFraStr := fmt.Sprintf("%s?%s", fraPath, strings.Join(newHashParams, "&"))
-	// log.Println("newFraStr:", newFraStr)
-	parsedUrl.Fragment = newFraStr // strings.Join(newHashParams, "&")
+	parsedUrl.Fragment = newFraStr
 	return parsedUrl.String(), nil
 }
 
@@ -149,7 +143,12 @@ func DelHashParam(u, param string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	hashParams := strings.Split(parsedUrl.Fragment, "&")
+	fra := parsedUrl.Fragment
+	fraPath, fraQuery := parseFragment(fra)
+	hashParams := []string{}
+	if fraQuery != "" {
+		hashParams = strings.Split(fraQuery, "&")
+	}
 	var newHashParams []string
 	for _, p := range hashParams {
 		pair := strings.Split(p, "=")
@@ -157,7 +156,13 @@ func DelHashParam(u, param string) (string, error) {
 			newHashParams = append(newHashParams, p)
 		}
 	}
-	parsedUrl.Fragment = strings.Join(newHashParams, "&")
+	newFraStr := ""
+	if len(newHashParams) == 0 {
+		newFraStr = fraPath
+	} else {
+		newFraStr = fmt.Sprintf("%s?%s", fraPath, strings.Join(newHashParams, "&"))
+	}
+	parsedUrl.Fragment = newFraStr
 	return parsedUrl.String(), nil
 }
 
