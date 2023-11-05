@@ -40,11 +40,16 @@ func TestSetHashParam(t *testing.T) {
 		result string
 	}
 	tests := []HashTest{
-		{"http://example.com/#t1=1&t2=2", "t1", "3", "http://example.com/#t1=3&t2=2"},
-		{"http://example.com/#t1=1&t2=2", "t3", "3", "http://example.com/#t1=1&t2=2&t3=3"},
-		{"http://example.com/?233", "t3", "3", "http://example.com/?233#t3=3"},
-		{"http://example.com/?233#t3=3", "t4", "4", "http://example.com/?233#t3=3&t4=4"},
-		{"http://example.com/?233#t3=3", "t3", "4", "http://example.com/?233#t3=4"},
+		{"http://example.com/#?t1=1&t2=2", "t1", "3", "http://example.com/#?t1=3&t2=2"},
+		{"http://example.com/?t1=1&t2=2", "t1", "3", "http://example.com/?t1=1&t2=2#?t1=3"},
+		{"http://example.com/p/?id=3#?t1=1&t2=2", "t1", "3", "http://example.com/p/?id=3#?t1=3&t2=2"},
+		{"http://example.com/#?t1=1&t2=2", "t3", "3", "http://example.com/#?t1=1&t2=2&t3=3"},
+		{"http://example.com/?p1=233", "t3", "3", "http://example.com/?p1=233#?t3=3"},
+		{"http://example.com/path/subp?233", "t3", "3", "http://example.com/path/subp?233#?t3=3"},
+		{"http://example.com/?233#?t3=3", "t4", "4", "http://example.com/?233#?t3=3&t4=4"},
+		{"http://example.com/?233#path?t3=3", "t3", "4", "http://example.com/?233#path?t3=4"},
+		{"http://example.com/?233#?p3=3&p4=4", "p3", "4", "http://example.com/?233#?p3=4&p4=4"},
+		{"http://example.com/?233#p3=3&p4=4", "p3", "4", "http://example.com/?233#p3=3&p4=4?p3=4"},
 	}
 	for _, test := range tests {
 		result, err := SetHashParam(test.url, test.param, test.value)
